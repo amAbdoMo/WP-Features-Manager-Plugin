@@ -1,6 +1,7 @@
 <?php
 /**
  * Plugin Name: Widgets Manager
+ * Plugin URI: https://github.com/amAbdoMo/WP-Widgets-Manager-Plugin
  * Description: Controls which Widgets Manager Elementor widgets are available in the editor.
  * Version: 1.0.0
  * Requires at least: 6.5
@@ -10,6 +11,7 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: widgets-manager
  * Domain Path: /languages
+ * Update URI: https://github.com/amAbdoMo/WP-Widgets-Manager-Plugin
  *
  * @package WidgetsManager
  */
@@ -29,6 +31,9 @@ require_once WIDGETS_MANAGER_PATH . 'includes/class-catalog.php';
 require_once WIDGETS_MANAGER_PATH . 'includes/class-enabled-widgets.php';
 require_once WIDGETS_MANAGER_PATH . 'includes/class-elementor-adapter.php';
 require_once WIDGETS_MANAGER_PATH . 'includes/class-admin-page.php';
+require_once WIDGETS_MANAGER_PATH . 'includes/class-self-updater.php';
 require_once WIDGETS_MANAGER_PATH . 'includes/class-plugin.php';
+
+add_action( 'plugins_loaded', array( Self_Updater::class, 'register' ), 1 );
 
 Plugin::instance()->boot();

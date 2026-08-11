@@ -1,0 +1,94 @@
+name: Package and release plugin
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Package GitHub release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the tagged source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up minimum supported PHP
+        uses: shivammathur/setup-php@b604ade2a87db23f8871b7182e69ec5e75effb45 # v2
+        with:
+          php-version: '7.4'
+          coverage: none
+
+      - name: Validate release version
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag_version="${GITHUB_REF_NAME#v}"
+          header_version="$(sed -n 's/^[[:space:]]*\*[[:space:]]*Version:[[:space:]]*//p' widgets-manager.php | head -n 1 | tr -d '\r')"
+          constant_version="$(sed -n "s/^[[:space:]]*define( 'WIDGETS_MANAGER_VERSION', '\([^']*\)' );[[:space:]]*$/\1/p" widgets-manager.php | head -n 1 | tr -d '\r')"
+
+          test "${tag_version}" != "${GITHUB_REF_NAME}"
+          test -n "${header_version}"
+          test -n "${constant_version}"
+          test "${tag_version}" = "${header_version}"
+          test "${header_version}" = "${constant_version}"
+
+      - name: Lint plugin PHP files
+        shell: bash
+        run: |
+          set -euo pipefail
+          find . -path './.git' -prune -o -name '*.php' -type f -print0 | xargs -0 -n1 php -l
+
+      - name: Build deterministic release archive
+        id: package
+        shell: bash
+        run: |
+          set -euo pipefail
+          artifact_name='widgets-manager.zip'
+          artifact_root="$(mktemp -d)"
+          stage_dir="${artifact_root}/widgets-manager"
+          source_timestamp="$(git log -1 --format=%ct)"
+
+          mkdir -p "${stage_dir}"
+          git archive --format=tar HEAD | tar -xf - -C "${stage_dir}"
+          rm -rf "${stage_dir}/.github" "${stage_dir}/tests"
+          rm -f "${stage_dir}/.gitignore" "${stage_dir}/phpcs.xml.dist" "${stage_dir}/phpunit.xml.dist"
+          find "${artifact_root}" -exec touch --date="@${source_timestamp}" {} +
+
+          (
+            cd "${artifact_root}"
+            TZ=UTC find widgets-manager -type f -print | LC_ALL=C sort | zip -X -q "${GITHUB_WORKSPACE}/${artifact_name}" -@
+          )
+          zipinfo -1 "${GITHUB_WORKSPACE}/${artifact_name}" | awk -F/ 'NF { print $1 }' | sort -u | grep -Fx 'widgets-manager'
+          test "$(zipinfo -1 "${GITHUB_WORKSPACE}/${artifact_name}" | awk -F/ 'NF { print $1 }' | sort -u | wc -l)" -eq 1
+          zipinfo -1 "${GITHUB_WORKSPACE}/${artifact_name}" | grep -Fx 'widgets-manager/vendor/plugin-update-checker/plugin-update-checker.php'
+          if zipinfo -1 "${GITHUB_WORKSPACE}/${artifact_name}" | grep -E '/(tests|\.git|\.github)(/|$)|/(phpcs\.xml\.dist|phpunit\.xml\.dist)$'; then
+            exit 1
+          fi
+
+          (
+            cd "${GITHUB_WORKSPACE}"
+            sha256sum "${artifact_name}" > "${artifact_name}.sha256"
+            sha256sum --check "${artifact_name}.sha256"
+          )
+          echo "archive=${GITHUB_WORKSPACE}/${artifact_name}" >> "${GITHUB_OUTPUT}"
+          echo "checksum=${GITHUB_WORKSPACE}/${artifact_name}.sha256" >> "${GITHUB_OUTPUT}"
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh release create "${GITHUB_REF_NAME}" \
+            "${{ steps.package.outputs.archive }}" \
+            "${{ steps.package.outputs.checksum }}" \
+            --title "${GITHUB_REF_NAME}" \
+            --generate-notes \
+            --verify-tag

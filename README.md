@@ -29,9 +29,13 @@ Enabled IDs are stored in the `widgets_manager_enabled_widgets` option as a posi
 
 Future production catalog entries belong in `WidgetsManager\Plugin::widget_catalog()` and use the metadata keys `id`, `provider`, `class`, `file`, `title`, and `description`. IDs are provider-qualified, such as `elementor/testimonial`. The Elementor adapter reads only entries whose `provider` is `elementor`.
 
+## Updates
+
+The plugin checks [GitHub Releases](https://github.com/amAbdoMo/WP-Widgets-Manager-Plugin/releases) for the exact `widgets-manager.zip` release asset. It does not install GitHub source archives. Plugin Update Checker 5.7 is bundled for this purpose.
+
 ## Development checks
 
-No dependencies are bundled. From the plugin directory, validate syntax with:
+From the plugin directory, validate syntax with:
 
 ```sh
 find . -name '*.php' -print0 | xargs -0 -n1 php -l

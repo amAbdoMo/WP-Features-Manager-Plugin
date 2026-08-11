@@ -2,17 +2,17 @@
 /**
  * Widget catalog.
  *
- * @package WidgetsManager
+ * @package WPFeaturesManager
  */
 
-namespace WidgetsManager;
+namespace WPFeaturesManager;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
- * Provides metadata for Widgets Manager widgets without loading widget code.
+ * Provides metadata for WP Features Manager widgets without loading widget code.
  */
 final class Catalog {
 

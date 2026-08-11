@@ -30,8 +30,8 @@ jobs:
         run: |
           set -euo pipefail
           tag_version="${GITHUB_REF_NAME#v}"
-          header_version="$(sed -n 's/^[[:space:]]*\*[[:space:]]*Version:[[:space:]]*//p' widgets-manager.php | head -n 1 | tr -d '\r')"
-          constant_version="$(sed -n "s/^[[:space:]]*define( 'WIDGETS_MANAGER_VERSION', '\([^']*\)' );[[:space:]]*$/\1/p" widgets-manager.php | head -n 1 | tr -d '\r')"
+          header_version="$(sed -n 's/^[[:space:]]*\*[[:space:]]*Version:[[:space:]]*//p' wp-features-manager.php | head -n 1 | tr -d '\r')"
+          constant_version="$(sed -n "s/^[[:space:]]*define( 'WP_FEATURES_MANAGER_VERSION', '\([^']*\)' );[[:space:]]*$/\1/p" wp-features-manager.php | head -n 1 | tr -d '\r')"
 
           test "${tag_version}" != "${GITHUB_REF_NAME}"
           test -n "${header_version}"
@@ -50,9 +50,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          artifact_name='widgets-manager.zip'
+          artifact_name='wp-features-manager.zip'
           artifact_root="$(mktemp -d)"
-          stage_dir="${artifact_root}/widgets-manager"
+          stage_dir="${artifact_root}/wp-features-manager"
           source_timestamp="$(git log -1 --format=%ct)"
 
           mkdir -p "${stage_dir}"
@@ -63,11 +63,11 @@ jobs:
 
           (
             cd "${artifact_root}"
-            TZ=UTC find widgets-manager -type f -print | LC_ALL=C sort | zip -X -q "${GITHUB_WORKSPACE}/${artifact_name}" -@
+            TZ=UTC find wp-features-manager -type f -print | LC_ALL=C sort | zip -X -q "${GITHUB_WORKSPACE}/${artifact_name}" -@
           )
-          zipinfo -1 "${GITHUB_WORKSPACE}/${artifact_name}" | awk -F/ 'NF { print $1 }' | sort -u | grep -Fx 'widgets-manager'
+          zipinfo -1 "${GITHUB_WORKSPACE}/${artifact_name}" | awk -F/ 'NF { print $1 }' | sort -u | grep -Fx 'wp-features-manager'
           test "$(zipinfo -1 "${GITHUB_WORKSPACE}/${artifact_name}" | awk -F/ 'NF { print $1 }' | sort -u | wc -l)" -eq 1
-          zipinfo -1 "${GITHUB_WORKSPACE}/${artifact_name}" | grep -Fx 'widgets-manager/vendor/plugin-update-checker/plugin-update-checker.php'
+          zipinfo -1 "${GITHUB_WORKSPACE}/${artifact_name}" | grep -Fx 'wp-features-manager/vendor/plugin-update-checker/plugin-update-checker.php'
           if zipinfo -1 "${GITHUB_WORKSPACE}/${artifact_name}" | grep -E '/(tests|\.git|\.github)(/|$)|/(phpcs\.xml\.dist|phpunit\.xml\.dist)$'; then
             exit 1
           fi

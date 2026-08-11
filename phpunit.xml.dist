@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="tests/bootstrap.php" colors="true">
 	<testsuites>
-		<testsuite name="Widgets Manager">
+		<testsuite name="WP Features Manager">
 			<directory suffix=".php">tests/unit</directory>
 		</testsuite>
 	</testsuites>

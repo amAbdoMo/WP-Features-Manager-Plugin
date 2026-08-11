@@ -2,10 +2,10 @@
 /**
  * Enabled widget settings.
  *
- * @package WidgetsManager
+ * @package WPFeaturesManager
  */
 
-namespace WidgetsManager;
+namespace WPFeaturesManager;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -21,7 +21,8 @@ final class Enabled_Widgets {
 	 *
 	 * @var string
 	 */
-	const OPTION_NAME = 'widgets_manager_enabled_widgets';
+	const OPTION_NAME        = 'wp_features_manager_enabled_widgets';
+	const LEGACY_OPTION_NAME = 'widgets_manager_enabled_widgets';
 
 	/**
 	 * Catalog instance.
@@ -45,13 +46,23 @@ final class Enabled_Widgets {
 	 * @return array<int,string>
 	 */
 	public function ids() {
-		$stored_ids = get_option( self::OPTION_NAME, array() );
-
-		if ( ! is_array( $stored_ids ) ) {
-			return array();
+		$stored_ids = get_option( self::OPTION_NAME, null );
+		if ( null === $stored_ids ) {
+			return $this->migrate_legacy_ids();
 		}
+		return is_array( $stored_ids ) ? $this->valid_ids( $stored_ids ) : array();
+	}
 
-		return $this->valid_ids( $stored_ids );
+	/**
+	 * Copies the old Widgets Manager allowlist without deleting its source option.
+	 *
+	 * @return array<int,string>
+	 */
+	private function migrate_legacy_ids() {
+		$legacy_ids = get_option( self::LEGACY_OPTION_NAME, array() );
+		$enabled_ids = is_array( $legacy_ids ) ? $this->valid_ids( $legacy_ids ) : array();
+		update_option( self::OPTION_NAME, $enabled_ids, false );
+		return $enabled_ids;
 	}
 
 	/**

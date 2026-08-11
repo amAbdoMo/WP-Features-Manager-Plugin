@@ -1,0 +1,256 @@
+.widgets-manager-before-after {
+	--wm-start-position: 50%;
+	--wm-position: var(--wm-start-position);
+	--wm-divider-color: #ffffff;
+	--wm-divider-size: 2px;
+	--wm-divider-style: dashed;
+	--wm-handle-size: 52px;
+	--wm-handle-background: #ffffff;
+	--wm-handle-hover-background: #f5f7fa;
+	--wm-handle-icon-color: #172033;
+	--wm-handle-icon-size: 20px;
+	--wm-label-spacing: 16px;
+	position: relative;
+	isolation: isolate;
+	overflow: hidden;
+	width: 100%;
+	height: 420px;
+	background: #e8ecf2;
+	color: #172033;
+	touch-action: pan-y;
+}
+
+.widgets-manager-before-after__layer,
+.widgets-manager-before-after__reveal,
+.widgets-manager-before-after__image,
+.widgets-manager-before-after__tint {
+	position: absolute;
+	inset: 0;
+}
+
+.widgets-manager-before-after__layer {
+	overflow: hidden;
+}
+
+.widgets-manager-before-after--sizing-image {
+	height: auto !important;
+}
+
+.widgets-manager-before-after--sizing-image > .widgets-manager-before-after__layer {
+	position: relative;
+	inset: auto;
+}
+
+.widgets-manager-before-after--sizing-image > .widgets-manager-before-after__layer > .widgets-manager-before-after__image {
+	position: relative;
+	inset: auto;
+	height: auto;
+}
+
+.widgets-manager-before-after__reveal {
+	z-index: 1;
+	overflow: hidden;
+	pointer-events: none;
+	transition: clip-path 160ms ease;
+}
+
+.widgets-manager-before-after--horizontal .widgets-manager-before-after__reveal {
+	clip-path: inset(0 calc(100% - var(--wm-position)) 0 0);
+}
+
+.widgets-manager-before-after--horizontal.is-wm-rtl .widgets-manager-before-after__reveal {
+	clip-path: inset(0 0 0 calc(100% - var(--wm-position)));
+}
+
+.widgets-manager-before-after--vertical .widgets-manager-before-after__reveal {
+	clip-path: inset(0 0 calc(100% - var(--wm-position)) 0);
+}
+
+.widgets-manager-before-after__base-label-mask {
+	inset: 0;
+	pointer-events: none;
+	position: absolute;
+	transition: clip-path 160ms ease;
+	z-index: 2;
+}
+
+.widgets-manager-before-after--horizontal .widgets-manager-before-after__base-label-mask {
+	clip-path: inset(0 0 0 var(--wm-position));
+}
+
+.widgets-manager-before-after--horizontal.is-wm-rtl .widgets-manager-before-after__base-label-mask {
+	clip-path: inset(0 var(--wm-position) 0 0);
+}
+
+.widgets-manager-before-after--vertical .widgets-manager-before-after__base-label-mask {
+	clip-path: inset(var(--wm-position) 0 0 0);
+}
+
+.widgets-manager-before-after .widgets-manager-before-after__image {
+	display: block;
+	width: 100%;
+	height: 100%;
+	max-width: none;
+	object-fit: cover;
+	object-position: center;
+	user-select: none;
+	-webkit-user-drag: none;
+}
+
+.widgets-manager-before-after__tint {
+	z-index: 1;
+	background: transparent;
+	pointer-events: none;
+}
+
+.widgets-manager-before-after__divider {
+	position: absolute;
+	z-index: 2;
+	box-sizing: border-box;
+	pointer-events: none;
+	transition: inset-inline-start 160ms ease, inset-block-start 160ms ease;
+}
+
+.widgets-manager-before-after--horizontal .widgets-manager-before-after__divider {
+	inset-block: 0;
+	inset-inline-start: var(--wm-position);
+	border-inline-start: var(--wm-divider-size) var(--wm-divider-style) var(--wm-divider-color);
+	transform: translateX(-50%);
+}
+
+.widgets-manager-before-after--horizontal.is-wm-rtl .widgets-manager-before-after__divider {
+	transform: translateX(50%);
+}
+
+.widgets-manager-before-after--vertical .widgets-manager-before-after__divider {
+	inset-inline: 0;
+	inset-block-start: var(--wm-position);
+	border-block-start: var(--wm-divider-size) var(--wm-divider-style) var(--wm-divider-color);
+	transform: translateY(-50%);
+}
+
+.widgets-manager-before-after__handle {
+	position: absolute;
+	z-index: 3;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	width: var(--wm-handle-size);
+	height: var(--wm-handle-size);
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background: var(--wm-handle-background);
+	color: var(--wm-handle-icon-color);
+	box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+	cursor: ew-resize;
+	touch-action: none;
+	user-select: none;
+	-webkit-user-select: none;
+	transition: inset-inline-start 160ms ease, inset-block-start 160ms ease, background-color 160ms ease;
+}
+
+.widgets-manager-before-after--horizontal .widgets-manager-before-after__handle {
+	inset-block-start: 50%;
+	inset-inline-start: var(--wm-position);
+	transform: translate(-50%, -50%);
+}
+
+.widgets-manager-before-after--horizontal.is-wm-rtl .widgets-manager-before-after__handle {
+	transform: translate(50%, -50%);
+}
+
+.widgets-manager-before-after--vertical .widgets-manager-before-after__handle {
+	inset-inline-start: 50%;
+	inset-block-start: var(--wm-position);
+	transform: translate(-50%, -50%);
+	cursor: ns-resize;
+}
+
+.widgets-manager-before-after__handle:hover {
+	background: var(--wm-handle-hover-background);
+}
+
+.widgets-manager-before-after__handle:focus-visible {
+	outline: 0;
+	background: var(--wm-handle-hover-background);
+	box-shadow: 0 4px 16px rgba(21, 94, 239, 0.32);
+}
+
+.widgets-manager-before-after__handle-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: var(--wm-handle-icon-size);
+	height: var(--wm-handle-icon-size);
+	font-size: var(--wm-handle-icon-size);
+	line-height: 1;
+}
+
+.widgets-manager-before-after__handle-icon svg {
+	display: block;
+	width: 100%;
+	height: 100%;
+	fill: currentColor;
+}
+
+.widgets-manager-before-after__handle-icon i {
+	font-size: var(--wm-handle-icon-size);
+}
+
+.widgets-manager-before-after--vertical .widgets-manager-before-after__handle-icon--default {
+	transform: rotate(90deg);
+}
+
+.widgets-manager-before-after__label {
+	position: absolute;
+	z-index: 2;
+	max-width: calc(100% - (2 * var(--wm-label-spacing)));
+	padding: 6px 10px;
+	border-radius: 3px;
+	background: rgba(23, 32, 51, 0.72);
+	color: #ffffff;
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 1.25;
+	pointer-events: none;
+}
+
+.widgets-manager-before-after--labels-top .widgets-manager-before-after__label {
+	inset-block-start: var(--wm-label-spacing);
+}
+
+.widgets-manager-before-after--labels-bottom .widgets-manager-before-after__label {
+	inset-block-end: var(--wm-label-spacing);
+}
+
+.widgets-manager-before-after__label--before {
+	inset-inline-start: var(--wm-label-spacing);
+}
+
+.widgets-manager-before-after__label--after {
+	inset-inline-end: var(--wm-label-spacing);
+}
+
+.widgets-manager-before-after.is-wm-dragging,
+.widgets-manager-before-after.is-wm-dragging * {
+	cursor: grabbing;
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+.widgets-manager-before-after.is-wm-dragging .widgets-manager-before-after__reveal,
+.widgets-manager-before-after.is-wm-dragging .widgets-manager-before-after__base-label-mask,
+.widgets-manager-before-after.is-wm-dragging .widgets-manager-before-after__divider,
+.widgets-manager-before-after.is-wm-dragging .widgets-manager-before-after__handle {
+	transition-duration: 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.widgets-manager-before-after,
+	.widgets-manager-before-after * {
+		transition: none;
+	}
+}
+

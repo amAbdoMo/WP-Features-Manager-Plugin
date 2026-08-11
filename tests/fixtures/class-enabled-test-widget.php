@@ -2,10 +2,10 @@
 /**
  * Enabled widget fixture.
  *
- * @package WidgetsManager
+ * @package WPFeaturesManager
  */
 
-namespace WidgetsManager\Tests\Fixtures;
+namespace WPFeaturesManager\Tests\Fixtures;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

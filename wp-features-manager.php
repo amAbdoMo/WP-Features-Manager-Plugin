@@ -3,7 +3,7 @@
  * Plugin Name: WP Features Manager
  * Plugin URI: https://github.com/amAbdoMo/WP-Features-Manager-Plugin
  * Description: Enables optional WordPress features and Elementor widgets through positive allowlists.
- * Version: 2.0.0
+ * Version: 2.1.0
  * Requires at least: 6.5
  * Requires PHP: 7.4
  * Author: Abdo

@@ -89,8 +89,10 @@
 .acfge-gallery-field .acfge-add-images.button {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 9px;
-    min-height: 40px;
+    box-sizing: border-box;
+    height: 40px;
     margin-top: 4px;
     padding: 6px 16px 6px 8px;
     border: 1px solid #e6442f;
@@ -102,14 +104,25 @@
     font-weight: 600;
     line-height: 1;
     text-shadow: none;
+    vertical-align: middle;
     cursor: pointer;
-    transition: background-color .16s ease, border-color .16s ease, box-shadow .16s ease, transform .16s ease;
+    transition: background-color .16s ease, border-color .16s ease, box-shadow .16s ease;
 }
 
-.acfge-gallery-field .acfge-add-images.button::before {
-    content: '+';
-    display: grid;
-    place-items: center;
+.acfge-gallery-field .acfge-add-images-icon,
+.acfge-gallery-field .acfge-add-images-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+    transform: none;
+}
+
+.acfge-gallery-field .acfge-add-images-icon {
+    flex: 0 0 26px;
     width: 26px;
     height: 26px;
     border-radius: 5px;
@@ -117,8 +130,12 @@
     color: #fff;
     font-size: 19px;
     font-weight: 400;
-    line-height: 1;
-    transition: background-color .16s ease, transform .16s ease;
+    transition: background-color .16s ease;
+}
+
+.acfge-gallery-field .acfge-add-images-label {
+    height: 26px;
+    white-space: nowrap;
 }
 
 .acfge-gallery-field .acfge-add-images.button:hover {
@@ -126,12 +143,10 @@
     background: #dc432f;
     box-shadow: 0 5px 12px rgba(196, 49, 31, .24);
     color: #fff;
-    transform: translateY(-1px);
 }
 
-.acfge-gallery-field .acfge-add-images.button:hover::before {
+.acfge-gallery-field .acfge-add-images.button:hover .acfge-add-images-icon {
     background: rgba(255, 255, 255, .26);
-    transform: scale(1.06);
 }
 
 .acfge-gallery-field .acfge-add-images.button:focus,
@@ -141,7 +156,6 @@
     box-shadow: 0 4px 10px rgba(196, 49, 31, .26);
     color: #fff;
     outline: 0;
-    transform: scale(1.02);
 }
 
 .acfge-gallery-field .acfge-add-images.button:active {
@@ -149,12 +163,11 @@
     background: #c83a28;
     box-shadow: 0 1px 3px rgba(196, 49, 31, .2);
     color: #fff;
-    transform: translateY(0) scale(.98);
 }
 
 @media (prefers-reduced-motion: reduce) {
     .acfge-gallery-field .acfge-add-images.button,
-    .acfge-gallery-field .acfge-add-images.button::before {
+    .acfge-gallery-field .acfge-add-images-icon {
         transition: none;
     }
 }

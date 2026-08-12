@@ -79,7 +79,10 @@ final class Field_Gallery extends \acf_field {
 				data-field-id="<?php echo esc_attr( $field_id ); ?>"
 				data-preview-size="<?php echo esc_attr( $preview ); ?>"
 				data-library="<?php echo esc_attr( $library ); ?>"
-			><?php esc_html_e( 'Add Images', 'wp-features-manager' ); ?></button>
+			>
+				<span class="acfge-add-images-icon" aria-hidden="true">+</span>
+				<span class="acfge-add-images-label"><?php esc_html_e( 'Add Images', 'wp-features-manager' ); ?></span>
+			</button>
 		</div>
 		<?php
 	}

@@ -27,6 +27,7 @@ final class Self_Updater {
 		}
 		require_once $puc_file;
 		self::$update_checker = \YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker( self::GITHUB_REPOSITORY, WP_FEATURES_MANAGER_FILE, self::PLUGIN_SLUG );
+		add_filter( self::$update_checker->getUniqueName( 'manual_check_link' ), '__return_empty_string' );
 		self::$update_checker->getVcsApi()->enableReleaseAssets( '/^' . preg_quote( self::RELEASE_ASSET, '/' ) . '$/', \YahnisElsts\PluginUpdateChecker\v5p7\Vcs\Api::REQUIRE_RELEASE_ASSETS );
 		add_filter( self::$update_checker->getUniqueName( 'vcs_update_detection_strategies' ), array( __CLASS__, 'release_only_strategies' ) );
 	}

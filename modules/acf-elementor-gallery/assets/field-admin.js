@@ -83,6 +83,10 @@
 	function openGalleryEditor($thumbs, $inputs, inputName, previewSize, library) {
 		var shortcode = '[gallery ids="' + galleryAttachmentIds($thumbs).join(',') + '"]';
 		var frame = wp.media.gallery.edit(shortcode);
+		var galleryEditState = frame.state('gallery-edit');
+
+		galleryEditState.set('displaySettings', false);
+		frame.content.render('browse');
 
 		if (library === 'uploadedTo') {
 			var galleryLibrary = frame.state('gallery-library');
@@ -90,7 +94,7 @@
 			galleryLibrary.get('library').props.set(mediaLibraryFilter(library));
 		}
 
-		frame.state('gallery-edit').on('update', function (selection) {
+		galleryEditState.on('update', function (selection) {
 			replaceGallerySelection($thumbs, $inputs, inputName, selection, previewSize);
 		});
 	}

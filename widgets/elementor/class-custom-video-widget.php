@@ -15,6 +15,7 @@ use Elementor\Group_Control_Css_Filter;
 use Elementor\Group_Control_Image_Size;
 use Elementor\Group_Control_Typography;
 use Elementor\Icons_Manager;
+use Elementor\Modules\DynamicTags\Module as Tags_Module;
 use Elementor\Repeater;
 use Elementor\Widget_Base;
 use WPFeaturesManager\Elementor_Adapter;
@@ -133,6 +134,10 @@ final class Custom_Video_Widget extends Widget_Base {
 			array(
 				'label'       => __( 'Video file', 'wp-features-manager' ),
 				'type'        => Controls_Manager::MEDIA,
+				'dynamic'     => array(
+					'active'     => true,
+					'categories' => array( Tags_Module::MEDIA_CATEGORY ),
+				),
 				'media_types' => array( 'video' ),
 				'description' => __( 'For broad browser support, use an H.264 video with AAC audio in an MP4 container. HEVC videos may play audio without a picture in some browsers.', 'wp-features-manager' ),
 				'condition'   => array( 'video_source_type' => 'media' ),
@@ -143,6 +148,13 @@ final class Custom_Video_Widget extends Widget_Base {
 			array(
 				'label'         => __( 'Direct video file URL', 'wp-features-manager' ),
 				'type'          => Controls_Manager::URL,
+				'dynamic'       => array(
+					'active'     => true,
+					'categories' => array(
+						Tags_Module::POST_META_CATEGORY,
+						Tags_Module::URL_CATEGORY,
+					),
+				),
 				'placeholder'   => 'https://example.com/video.mp4',
 				'show_external' => false,
 				'description'   => __( 'Enter a direct MP4, WebM, OGV, or native HLS file URL. A YouTube or Vimeo page URL is not a video file URL.', 'wp-features-manager' ),

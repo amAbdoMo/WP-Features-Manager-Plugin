@@ -1,9 +1,8 @@
 name: Package and release plugin
 
 on:
-  push:
-    tags:
-      - 'v*'
+  release:
+    types: [published]
 
 permissions:
   contents: write
@@ -12,12 +11,15 @@ jobs:
   release:
     name: Package GitHub release
     runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: ${{ github.event.release.tag_name }}
 
     steps:
       - name: Check out the tagged source
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
+          ref: ${{ github.event.release.tag_name }}
 
       - name: Set up minimum supported PHP
         uses: shivammathur/setup-php@b604ade2a87db23f8871b7182e69ec5e75effb45 # v2
@@ -29,11 +31,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          tag_version="${GITHUB_REF_NAME#v}"
+          release_tag="$RELEASE_TAG"
+          tag_version="${release_tag#v}"
           header_version="$(sed -n 's/^[[:space:]]*\*[[:space:]]*Version:[[:space:]]*//p' wp-features-manager.php | head -n 1 | tr -d '\r')"
           constant_version="$(sed -n "s/^[[:space:]]*define( 'WP_FEATURES_MANAGER_VERSION', '\([^']*\)' );[[:space:]]*$/\1/p" wp-features-manager.php | head -n 1 | tr -d '\r')"
 
-          test "${tag_version}" != "${GITHUB_REF_NAME}"
+          test "${tag_version}" != "${release_tag}"
           test -n "${header_version}"
           test -n "${constant_version}"
           test "${tag_version}" = "${header_version}"
@@ -80,15 +83,13 @@ jobs:
           echo "archive=${GITHUB_WORKSPACE}/${artifact_name}" >> "${GITHUB_OUTPUT}"
           echo "checksum=${GITHUB_WORKSPACE}/${artifact_name}.sha256" >> "${GITHUB_OUTPUT}"
 
-      - name: Publish GitHub release
+      - name: Upload assets to the published release
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
-          gh release create "${GITHUB_REF_NAME}" \
+          gh release upload "$RELEASE_TAG" \
             "${{ steps.package.outputs.archive }}" \
             "${{ steps.package.outputs.checksum }}" \
-            --title "${GITHUB_REF_NAME}" \
-            --generate-notes \
-            --verify-tag
+            --clobber

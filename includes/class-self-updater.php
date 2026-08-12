@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 final class Self_Updater {
-	const GITHUB_REPOSITORY = 'https://github.com/amAbdoMo/WP-Widgets-Manager-Plugin';
+	const GITHUB_REPOSITORY = 'https://github.com/amAbdoMo/WP-Features-Manager-Plugin';
 	const PLUGIN_SLUG = 'wp-features-manager';
 	const RELEASE_ASSET = 'wp-features-manager.zip';
 	private static $update_checker;

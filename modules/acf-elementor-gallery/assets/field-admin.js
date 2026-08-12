@@ -49,15 +49,65 @@
 		return '<li class="acfge-thumb" data-id="' + attachmentId + '">' +
 			'<img src="' + escapeAttribute(imageUrl) + '" alt="">' +
 			'<button type="button" class="acfge-remove" aria-label="' + escapeAttribute(strings.remove_image) + '">&#x2715;</button>' +
-			'<span class="acfge-drag-handle" title="' + escapeAttribute(strings.drag_to_reorder) + '">&#8801;</span>' +
 			'</li>';
 	}
 
 	function mediaLibraryFilter(library) {
-		if (library !== 'uploadedTo') {
-			return {};
+		var filter = { type: 'image' };
+		if (library === 'uploadedTo') {
+			filter.uploadedTo = wp.media.view.settings.post.id;
 		}
-		return { uploadedTo: wp.media.view.settings.post.id };
+		return filter;
+	}
+
+	function galleryAttachmentIds($thumbs) {
+		return $thumbs.find('.acfge-thumb').map(function () {
+			return parseInt($(this).data('id'), 10);
+		}).get();
+	}
+
+	function replaceGallerySelection($thumbs, $inputs, inputName, selection, previewSize) {
+		var attachmentIds = selection.pluck('id');
+
+		$thumbs.empty();
+		selection.each(function (attachment) {
+			$thumbs.append(thumbnailMarkup(
+				attachment.get('id'),
+				previewUrl(attachment, previewSize)
+			));
+		});
+		syncInputs($inputs, inputName, attachmentIds);
+		$thumbs.sortable('refresh');
+	}
+
+	function openGalleryEditor($thumbs, $inputs, inputName, previewSize, library) {
+		var shortcode = '[gallery ids="' + galleryAttachmentIds($thumbs).join(',') + '"]';
+		var frame = wp.media.gallery.edit(shortcode);
+
+		if (library === 'uploadedTo') {
+			var galleryLibrary = frame.state('gallery-library');
+			galleryLibrary.set('filterable', false);
+			galleryLibrary.get('library').props.set(mediaLibraryFilter(library));
+		}
+
+		frame.state('gallery-edit').on('update', function (selection) {
+			replaceGallerySelection($thumbs, $inputs, inputName, selection, previewSize);
+		});
+	}
+
+	function openImagePicker($thumbs, $inputs, inputName, previewSize, library) {
+		var frame = wp.media({
+			title: strings.select_images,
+			button: { text: strings.add_to_gallery },
+			multiple: true,
+			library: mediaLibraryFilter(library)
+		});
+
+		frame.on('select', function () {
+			var selection = frame.state().get('selection');
+			replaceGallerySelection($thumbs, $inputs, inputName, selection, previewSize);
+		});
+		frame.open();
 	}
 
 	function initializeGalleryField($field) {
@@ -75,7 +125,7 @@
 
 		$thumbs.sortable({
 			items: '.acfge-thumb',
-			handle: '.acfge-drag-handle',
+			cancel: '.acfge-remove',
 			tolerance: 'pointer',
 			placeholder: 'acfge-thumb ui-sortable-placeholder',
 			forcePlaceholderSize: true,
@@ -105,28 +155,11 @@
 
 		$addButton.on('click', function (event) {
 			event.preventDefault();
-			var frame = wp.media({
-				title: strings.select_images,
-				button: { text: strings.add_to_gallery },
-				multiple: true,
-				library: mediaLibraryFilter(library)
-			});
-
-			frame.on('select', function () {
-				$inputs.find('.acfge-empty-placeholder').remove();
-				frame.state().get('selection').each(function (attachment) {
-					var attachmentId = parseInt(attachment.get('id'), 10);
-					if ($thumbs.find('[data-id="' + attachmentId + '"]').length) {
-						return;
-					}
-					$thumbs.append(thumbnailMarkup(attachmentId, previewUrl(attachment, previewSize)));
-					$inputs.append(
-						'<input type="hidden" name="' + escapeAttribute(inputName) + '[]" value="' + attachmentId + '">'
-					);
-				});
-				$thumbs.sortable('refresh');
-			});
-			frame.open();
+			if (galleryAttachmentIds($thumbs).length === 0) {
+				openImagePicker($thumbs, $inputs, inputName, previewSize, library);
+				return;
+			}
+			openGalleryEditor($thumbs, $inputs, inputName, previewSize, library);
 		});
 	}
 

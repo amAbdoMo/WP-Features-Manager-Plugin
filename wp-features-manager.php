@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: WP Features Manager
- * Plugin URI: https://github.com/amAbdoMo/WP-Widgets-Manager-Plugin
+ * Plugin URI: https://github.com/amAbdoMo/WP-Features-Manager-Plugin
  * Description: Enables optional WordPress features and Elementor widgets through positive allowlists.
  * Version: 2.0.0
  * Requires at least: 6.5
@@ -11,7 +11,7 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: wp-features-manager
  * Domain Path: /languages
- * Update URI: https://github.com/amAbdoMo/WP-Widgets-Manager-Plugin
+ * Update URI: https://github.com/amAbdoMo/WP-Features-Manager-Plugin
  *
  * @package WPFeaturesManager
  */

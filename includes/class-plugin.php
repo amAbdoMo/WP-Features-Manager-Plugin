@@ -102,6 +102,12 @@ final class Plugin {
 				'minimum_elementor_version' => self::MINIMUM_ELEMENTOR_VERSION,
 				'conflict'                  => 'acf-elementor-gallery-standalone',
 			),
+			array(
+				'id'          => 'duplicate-content',
+				'title'       => __( 'Duplicate Content', 'wp-features-manager' ),
+				'description' => __( 'Adds a Duplicate row action for Posts, Pages, and custom post types without leaving the list.', 'wp-features-manager' ),
+				'file'        => 'modules/duplicate-content/module.php',
+			),
 		);
 	}
 

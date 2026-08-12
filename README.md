@@ -15,6 +15,8 @@ Feature metadata is registered in `WPFeaturesManager\Plugin::module_catalog()` w
 
 The bundled `acf-elementor-gallery` module is disabled by default. It retains the public ACF field type `acfge_gallery`, Elementor dynamic tag name `acfge-gallery`, and attachment-ID value storage format used by the former standalone gallery plugin. It reports missing ACF/Elementor requirements and conflicts with an active standalone gallery plugin instead of running alongside it.
 
+The disabled-by-default **Duplicate Content** module adds a small **Duplicate** row action to Posts, Pages, and standard custom post type list tables. It copies the content, taxonomy terms, and custom fields into a new draft owned by the current user without leaving the list. Copy titles use `Title (Copy)`, followed by `Title (Copy 2)`, `Title (Copy 3)`, and so on.
+
 ## Widget catalog
 
 The two widgets migrated from Widgets Manager remain disabled by default:
@@ -64,7 +66,7 @@ The host owns settings, administration, updates, and release packaging. Bundled 
 
 ## Updates and releases
 
-The host updater checks [GitHub Releases](https://github.com/amAbdoMo/WP-Widgets-Manager-Plugin/releases) for the exact `wp-features-manager.zip` asset. The release workflow packages it with the `wp-features-manager` archive root.
+The host updater checks [GitHub Releases](https://github.com/amAbdoMo/WP-Features-Manager-Plugin/releases) for the exact `wp-features-manager.zip` asset. The release workflow packages it with the `wp-features-manager` archive root.
 
 ## Development checks
 

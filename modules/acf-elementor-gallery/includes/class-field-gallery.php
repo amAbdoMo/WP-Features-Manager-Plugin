@@ -79,7 +79,7 @@ final class Field_Gallery extends \acf_field {
 				data-field-id="<?php echo esc_attr( $field_id ); ?>"
 				data-preview-size="<?php echo esc_attr( $preview ); ?>"
 				data-library="<?php echo esc_attr( $library ); ?>"
-			><?php esc_html_e( '+ Add Images', 'wp-features-manager' ); ?></button>
+			><?php esc_html_e( 'Add Images', 'wp-features-manager' ); ?></button>
 		</div>
 		<?php
 	}
@@ -91,7 +91,6 @@ final class Field_Gallery extends \acf_field {
 		<li class="acfge-thumb" data-id="<?php echo esc_attr( $attachment_id ); ?>">
 			<img src="<?php echo esc_url( $image_url ? $image_url : '' ); ?>" alt="<?php echo esc_attr( $alt_text ); ?>" />
 			<button type="button" class="acfge-remove" aria-label="<?php esc_attr_e( 'Remove image', 'wp-features-manager' ); ?>">&#x2715;</button>
-			<span class="acfge-drag-handle" title="<?php esc_attr_e( 'Drag to reorder', 'wp-features-manager' ); ?>">&#8801;</span>
 		</li>
 		<?php
 	}
@@ -107,8 +106,7 @@ final class Field_Gallery extends \acf_field {
 			array(
 				'select_images'   => __( 'Select Gallery Images', 'wp-features-manager' ),
 				'add_to_gallery'  => __( 'Add to Gallery', 'wp-features-manager' ),
-				'remove_image'    => __( 'Remove image', 'wp-features-manager' ),
-				'drag_to_reorder' => __( 'Drag to reorder', 'wp-features-manager' ),
+				'remove_image'   => __( 'Remove image', 'wp-features-manager' ),
 			)
 		);
 	}

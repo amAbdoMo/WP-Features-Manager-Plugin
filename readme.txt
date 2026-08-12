@@ -1,6 +1,6 @@
 === WP Features Manager ===
 Contributors: amAbdoMo
-Tags: elementor, acf, gallery, widgets, video, html5 video, captions, image comparison
+Tags: elementor, acf, gallery, widgets, video, duplicate post, custom post types
 Requires at least: 6.5
 Requires PHP: 7.4
 Stable tag: 2.0.0
@@ -14,6 +14,8 @@ Enable optional WordPress modules and Elementor widgets from one custom manageme
 WP Features Manager provides one custom admin screen with separate Modules and Elementor Widgets tabs. Search, status filters, and bulk actions apply to the active tab, while positive allowlists keep disabled implementation files unloaded.
 
 The disabled-by-default ACF Elementor Gallery module adds the `acfge_gallery` field type and `acfge-gallery` Elementor dynamic tag when Advanced Custom Fields and Elementor 3.20 or later are active. The module preserves the standalone gallery identifiers and stored attachment-ID format.
+
+The disabled-by-default Duplicate Content module adds a small Duplicate row action to Posts, Pages, and standard custom post type list tables. It copies content, taxonomy terms, and custom fields into a new draft without leaving the list. Copy titles use `Title (Copy)`, then `Title (Copy 2)`, `Title (Copy 3)`, and so on.
 
 Version 1.2.1 includes the disabled-by-default Custom Video widget. It is a plugin-owned, dependency-free HTML5 video player for WordPress Media Library videos and direct video-file URLs, with optional alternate sources, poster images, custom overlay/play button, captions, keyboard controls, and individually configurable custom controls. It does not require Elementor Pro, jQuery, or a third-party player library.
 
@@ -52,6 +54,7 @@ The `wp_features_manager_enabled_modules`, `wp_features_manager_enabled_widgets`
 * Added fast client-side Modules and Elementor Widgets tabs with tab-scoped search, filters, and bulk actions.
 * Renamed the host to WP Features Manager and added a generic opt-in module system.
 * Integrated ACF Elementor Gallery as the first dependency-aware module.
+* Added an opt-in Duplicate Content module for Posts, Pages, and custom post types.
 * Migrated the complete Before/After Image and Custom Video widgets, assets, controls, custom admin design, and regression tests from Widgets Manager.
 * Copies the previous widget allowlist on first use and warns while the old plugin remains active.
 
